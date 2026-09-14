@@ -10,7 +10,7 @@ public class Matrix {
     //constructor of matrix
     public Matrix (int rows, int cols) {
         if(rows <= 0 || cols <= 0)
-            throw new IllegalArgumentException("Unavaliable date's size", null);
+            throw new IllegalArgumentException("Invalid date size", null);
         this.rows = rows;
         this.cols = cols;
         this.nums = new int[rows][cols];
@@ -19,6 +19,10 @@ public class Matrix {
     //set nums
     public void set(int i, int j, int value) {
         nums[i][j] = value;
+    }
+    //get nums
+    public int get(int i, int j) {
+        return nums[i][j];
     }
 
     //output
@@ -29,6 +33,19 @@ public class Matrix {
             }
             System.out.println();
         }
+    }
+
+    //sum
+    public Matrix sum_matrix(Matrix B) {
+        if (rows != B.rows || cols != B.cols) 
+            throw new IllegalArgumentException("Matrixs have different sizes.", null);
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result.set(i, j, this.get(i, j) + B.get(i, j));
+            }
+        }
+        return result;
     }
 
     //test
@@ -72,13 +89,20 @@ public class Matrix {
                 B.set(i, j, input.nextInt());
             }
         }
-        input.close();
+        
         //output
         System.out.println("Matrix 'A': ");
         A.print_matrix();
 
         System.out.println("Matrix 'B': ");
         B.print_matrix();
-
+        
+        System.out.println("Enter the operation from this list: +, T, /");
+        String operation = input.next();
+        if (operation.equals("+")) {
+            Matrix result = A.sum_matrix(B);
+            result.print_matrix();
         }
-}
+        input.close();
+        }
+    }
