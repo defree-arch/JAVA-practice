@@ -10,7 +10,7 @@ public class Matrix {
     //constructor of matrix
     public Matrix (int rows, int cols) {
         if(rows <= 0 || cols <= 0)
-            throw new IllegalArgumentException("Invalid date size", null);
+            throw new IllegalArgumentException("Invalid data size", null);
         this.rows = rows;
         this.cols = cols;
         this.nums = new int[rows][cols];
@@ -77,6 +77,51 @@ public class Matrix {
         return result;
     }
 
+    //determinant
+    public double determinant() {
+        if (cols != rows) 
+            throw new IllegalArgumentException("Invalid size.", null);
+        int n = rows; 
+
+        double matrix[][] = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = this.get(i, j);
+            }
+        }
+        double result = 1;
+
+        for (int k = 0; k < n; k++) {
+            if (matrix[k][k] == 0) {
+                int swap_row = -1;
+                for (int i = k + 1; i < n; i++) {
+                    if (matrix[i][k] != 0) {
+                        swap_row = i;
+                        break;
+                    }
+                }
+                if (swap_row == -1) return 0;
+                
+                //swaping rows
+                double[] temp = matrix[k];
+                matrix[k] = matrix[swap_row];
+                matrix[swap_row] = temp;
+                result = -result;
+                //
+            }
+        //changing to 0 
+        for (int i = k + 1; i < n; i++) {
+            double multiplier = matrix[i][k] / matrix[k][k];
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] -= multiplier * matrix[k][j];
+            }
+        }
+        //
+        result *= matrix[k][k];
+        }
+        return result;
+    }
+
     //test
     public static void main (String[] args) {
         Scanner input = new Scanner(System.in);
@@ -126,29 +171,49 @@ public class Matrix {
         System.out.println("Matrix 'B': ");
         B.print_matrix();
         
-        System.out.println("Enter the operation from this list: +, *, t, /");
+        System.out.println("Enter the operation from this list: +, *, t (transposition), d (determinant)");
         String operation = input.next();
+
+        //add
         if (operation.equals("+")) {
             Matrix result = A.sum_matrix(B);
             result.print_matrix();
         }
 
+        //multiply
         if (operation.equals("*")) {
             Matrix result = A.multiply_matrix(B);
             result.print_matrix();
         }
 
-         if (operation.equals("t")) {
+        //transposition
+        if (operation.equals("t")) {
             System.out.println("Matrix is A or B (enter a high letter): ");
             String matrix = input.next();
-            if (matrix.equals("A")) {
+           if (matrix.equals("A")) {
                 Matrix result = A.t_matrix();
                 result.print_matrix();
-            }
-            else {
-               Matrix result = B.t_matrix();
+           }
+           else {
+                Matrix result = B.t_matrix();
                 result.print_matrix(); 
-            }
+           }
+        }
+
+        //determinant
+        
+        if (operation.equals("d")) {
+           System.out.println("Matrix is A or B (enter a high letter): ");
+           String matrix = input.next();
+           if (matrix.equals("A")) {
+                double result = A.determinant();
+                System.out.print("The determinant of matrix A: " + result);
+           }
+           else {
+                double result = B.determinant();
+                System.out.print("The determinant of matrix B: " + result);
+
+           }
         }
         input.close();
         }
