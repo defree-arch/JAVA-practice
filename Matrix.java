@@ -65,6 +65,18 @@ public class Matrix {
         return result;
     }
 
+    //transposition matrix
+    public Matrix t_matrix() {
+        Matrix result = new Matrix(cols, rows);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+
+                result.set(j, i, this.get(i, j));
+            }
+        }
+        return result;
+    }
+
     //test
     public static void main (String[] args) {
         Scanner input = new Scanner(System.in);
@@ -114,7 +126,7 @@ public class Matrix {
         System.out.println("Matrix 'B': ");
         B.print_matrix();
         
-        System.out.println("Enter the operation from this list: +, *, T, /");
+        System.out.println("Enter the operation from this list: +, *, t, /");
         String operation = input.next();
         if (operation.equals("+")) {
             Matrix result = A.sum_matrix(B);
@@ -124,6 +136,19 @@ public class Matrix {
         if (operation.equals("*")) {
             Matrix result = A.multiply_matrix(B);
             result.print_matrix();
+        }
+
+         if (operation.equals("t")) {
+            System.out.println("Matrix is A or B (enter a high letter): ");
+            String matrix = input.next();
+            if (matrix.equals("A")) {
+                Matrix result = A.t_matrix();
+                result.print_matrix();
+            }
+            else {
+               Matrix result = B.t_matrix();
+                result.print_matrix(); 
+            }
         }
         input.close();
         }
