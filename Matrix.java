@@ -48,6 +48,23 @@ public class Matrix {
         return result;
     }
 
+    //multiply matrixes
+    public Matrix multiply_matrix(Matrix B) {
+        if (cols != B.rows) 
+            throw new IllegalArgumentException("Invalid sizes.", null);
+        Matrix result = new Matrix(rows, B.cols);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < B.cols; j++) {
+                int sum = 0;
+                for (int k = 0; k < cols; k++) {
+                    sum += this.get(i, k) * B.get(k, j);
+                }
+                result.set(i, j, sum);
+            }
+        }
+        return result;
+    }
+
     //test
     public static void main (String[] args) {
         Scanner input = new Scanner(System.in);
@@ -97,10 +114,15 @@ public class Matrix {
         System.out.println("Matrix 'B': ");
         B.print_matrix();
         
-        System.out.println("Enter the operation from this list: +, T, /");
+        System.out.println("Enter the operation from this list: +, *, T, /");
         String operation = input.next();
         if (operation.equals("+")) {
             Matrix result = A.sum_matrix(B);
+            result.print_matrix();
+        }
+
+        if (operation.equals("*")) {
+            Matrix result = A.multiply_matrix(B);
             result.print_matrix();
         }
         input.close();
