@@ -51,4 +51,34 @@ public class Complex {
         if (real == 0) return imag + "i";
         return real + (imag > 0 ? "+" : "") + imag + "i";
     }
+
+    //parsing input
+    public static Complex parse(String s) {
+        s = s.replace(" ", "");
+
+        if (!s.contains("i")) return new Complex(Double.parseDouble(s), 0.0);
+
+        s = s.substring(0, s.length() - 1);
+
+        int symbol_index = -1;
+        for (int k = 1; k < s.length(); k++) {
+            if (s.charAt(k) == '+' || s.charAt(k) == '-') {
+                symbol_index = k;
+                break;
+            }
+        }
+
+        if (symbol_index == -1) {
+            if (s.isEmpty() || s.equals("+")) return new Complex(0.0, 1.0);
+            if (s.isEmpty() || s.equals("-")) return new Complex(0.0, -1.0);
+            return new Complex(0.0, Double.parseDouble(s));
+        }
+
+        double real = Double.parseDouble(s.substring(0, symbol_index));
+        String imag = s.substring(symbol_index);
+        if (imag.equals("+")) imag = "+1";
+        else imag = "-1";
+        return new Complex(real, Double.parseDouble(imag));
+        
+    }
 }
