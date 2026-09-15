@@ -28,7 +28,7 @@ public class Complex {
     public Complex div (Complex B) {
         double del = B.real * B.real + B.imag * B.imag;
         if (del == 0) throw new ArithmeticException("Division by zero");
-        return new Complex((real * B.real + imag * B.imag)/del, (real * B.imag - B.real * imag)/del);
+        return new Complex((real * B.real + imag * B.imag)/del, (imag * B.real - real * B.imag)/del);
     }
 
     //test for zero
@@ -77,7 +77,7 @@ public class Complex {
         double real = Double.parseDouble(s.substring(0, symbol_index));
         String imag = s.substring(symbol_index);
         if (imag.equals("+")) imag = "+1";
-        else imag = "-1";
+        if (imag.equals("-")) imag = "-1";
         return new Complex(real, Double.parseDouble(imag));   
     }
 }

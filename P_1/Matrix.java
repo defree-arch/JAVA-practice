@@ -131,7 +131,7 @@ public class Matrix {
     public Complex[][] inverse() {
         if (rows != cols)
             throw new IllegalArgumentException("Invalid size.", null);
-        if (this.determinant() == new Complex(0.0, 0.0)) 
+        if (this.determinant().is_zero()) 
             throw new IllegalArgumentException("Invalid determinant (inverse is not able).", null);
 
         int n = rows;
@@ -147,10 +147,10 @@ public class Matrix {
 
         //Gauss-Jordan method
         for (int k = 0; k < n; k++) {
-            if (matrix_E[k][k] == new Complex(0.0, 0.0)) {
+            if (matrix_E[k][k].is_zero()) {
                 int swap_row = -1;
                 for(int i = k + 1; i < n; i++) {
-                    if (matrix_E[i][k] != new Complex(0.0, 0.0)) {
+                    if (!matrix_E[i][k].is_zero()) {
                         swap_row = i;
                         break;
                     }
