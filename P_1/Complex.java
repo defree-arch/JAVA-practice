@@ -78,7 +78,6 @@ public class Complex {
         String imag = s.substring(symbol_index);
         if (imag.equals("+")) imag = "+1";
         else imag = "-1";
-        return new Complex(real, Double.parseDouble(imag));
-        
+        return new Complex(real, Double.parseDouble(imag));   
     }
 }
