@@ -5,7 +5,7 @@ public class Matrix {
     //fields of class
     private final int rows;
     private final int cols;
-    private final int[][] nums;
+    private final Complex[][] nums;
 
     //constructor of matrix
     public Matrix (int rows, int cols) {
@@ -13,15 +13,20 @@ public class Matrix {
             throw new IllegalArgumentException("Invalid data size", null);
         this.rows = rows;
         this.cols = cols;
-        this.nums = new int[rows][cols];
+        this.nums = new Complex[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                nums[i][j] = new Complex(0.0, 0.0);
+            }
+        }
     }
 
     //set nums
-    public void set(int i, int j, int value) {
+    public void set(int i, int j, Complex value) {
         nums[i][j] = value;
     }
     //get nums
-    public int get(int i, int j) {
+    public Complex get(int i, int j) {
         return nums[i][j];
     }
 
@@ -42,7 +47,7 @@ public class Matrix {
         Matrix result = new Matrix(rows, cols);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                result.set(i, j, this.get(i, j) + B.get(i, j));
+                result.set(i, j, this.get(i, j).add(B.get(i, j)));
             }
         }
         return result;
@@ -55,9 +60,9 @@ public class Matrix {
         Matrix result = new Matrix(rows, B.cols);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < B.cols; j++) {
-                int sum = 0;
+                Complex sum = new Complex(0.0, 0.0);
                 for (int k = 0; k < cols; k++) {
-                    sum += this.get(i, k) * B.get(k, j);
+                    sum =  sum.add(this.get(i, k).multiply(B.get(k, j)));
                 }
                 result.set(i, j, sum);
             }
@@ -83,19 +88,19 @@ public class Matrix {
             throw new IllegalArgumentException("Invalid size.", null);
         int n = rows; 
 
-        double matrix[][] = new double[n][n];
+        Complex matrix[][] = new Complex[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 matrix[i][j] = this.get(i, j);
             }
         }
-        double result = 1;
+        Complex result = new Complex(1.0, 0.0);
 
         for (int k = 0; k < n; k++) {
-            if (matrix[k][k] == 0) {
+            if (matrix[k][k].is_zero()) {
                 int swap_row = -1;
                 for (int i = k + 1; i < n; i++) {
-                    if (matrix[i][k] != 0) {
+                    if (!matrix[i][k].is_zero()) {
                         swap_row = i;
                         break;
                     }
@@ -103,21 +108,21 @@ public class Matrix {
                 if (swap_row == -1) return 0;
                 
                 //swaping rows
-                double[] temp = matrix[k];
+                Complex[] temp = matrix[k];
                 matrix[k] = matrix[swap_row];
                 matrix[swap_row] = temp;
-                result = -result;
+                result = result.multiply(new Complex(-1.0, 0.0));
                 //
             }
         //changing to 0 
         for (int i = k + 1; i < n; i++) {
-            double multiplier = matrix[i][k] / matrix[k][k];
+            Complex multiplier = matrix[i][k].div(matrix[k][k]);
             for (int j = 0; j < n; j++) {
-                matrix[i][j] -= multiplier * matrix[k][j];
+                matrix[i][j] = matrix[i][j].sub(multiplier.multiply(matrix[k][j]));
             }
         }
         //
-        result *= matrix[k][k];
+        result = result.multiply(matrix[k][k]);
         }
         return result;
     }
